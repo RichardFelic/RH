@@ -1,0 +1,29 @@
+{% extends 'msrh/main.html' %}
+
+{% block content %}
+<h1>Gestión de Competencias</h1>
+<hr>
+<br>
+<div class="card col-md-8 offset-md-2">
+    <div class="card-header text-center bg-primary text-white">
+     <h3>Agregar Nueva Competencia</h3>
+    </div>
+    <div class="card-body  ">
+
+        <div class="container col-md-7 col-lg-11">
+          
+        <form  method="POST"> 
+            {% csrf_token %}
+
+            {{form_compe.as_p}}
+            <div class="modal-footer">
+                <div class="bd-example">
+            <a href="{% url 'competencia' %}" type="button" class="btn btn-danger">Cancelar</a>
+            <button class="btn btn-success" type="submit">Agregar</button>
+        </div>
+            </div>
+        </form>
+    </div>   
+    </div>
+  </div>
+{% endblock %}

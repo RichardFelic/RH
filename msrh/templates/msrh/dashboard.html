@@ -1,0 +1,87 @@
+{% extends 'msrh/main.html' %}
+
+{% block content %}
+
+<h1>Dashboard</h1>
+<hr>
+<div class="row">
+	<div class="col">
+		<div class="col-md">
+			<div class="card text-center text-white  mb-3 " id="total-orders">
+			  	<div class="card-header bg-primary">
+			  		<h5 class="card-title ">Total puestos</h5>
+			  	</div>
+			  	<div class="card-body">
+			    	<h3 class="card-title text-dark">{{total_puesto}}</h3>
+			  	</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col">
+		<div class="col-md">
+			<div class="card text-center text-white  mb-3" id="orders-delivered">
+			  	<div class="card-header bg-primary">
+			  		<h5 class="card-title">Orders Delivered</h5>
+			  	</div>
+			  	<div class="card-body">
+			    	<h3 class="card-title text-dark"></h3>
+			  	</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col">
+		<div class="col-md">
+			<div class="card text-center text-white  mb-3" id="orders-pending">
+			  	<div class="card-header bg-primary">
+			  		<h5 class="card-title">Orders Pending</h5>
+			  	</div>
+			  	<div class="card-body">
+			    	<h3 class="card-title text-dark"></h3>
+			  	</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-5">
+		<h5>IDIOMA</h5>
+		<hr>
+		<div class="card card-body">
+			<a class="btn btn-primary  btn-sm btn-block" href="">Create Idioma</a>
+			<table class="table table-sm">
+				<tr>
+					<th>#</th>
+					<th>Idioma</th>
+					<th>Disponoble</th>
+                    <th>Acción</th>
+				</tr>
+
+			</table>
+		</div>
+	</div>
+
+    <div class="col-md-7">
+		<h5>COMPETENCIAS</h5>
+		<hr>
+		<div class="card card-body">
+			<a class="btn btn-primary  btn-sm btn-block" href="">Create Competencia</a>
+			<table class="table table-sm">
+				<tr>
+					<th>#</th>
+					<th>Competencias</th>
+					<th>Estado</th>
+					<th>Acciones</th>
+				</tr>
+		
+			</table>
+		</div>
+	</div>
+
+</div>-->
+{% endblock %}
+
+
+    

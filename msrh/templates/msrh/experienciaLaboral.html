@@ -1,0 +1,42 @@
+{% extends 'msrh/main.html' %}
+
+{% block content %}
+
+<h1>Gestión de Experiencia Laboral</h1>
+<hr>
+
+<a class="btn btn-success" href="{% url 'Crearexperiencialaboral' %}">Crear Nueva Experiencia Laboral</a>
+
+<table class="table table-hover table-responsive">
+    <thead>
+      <tr class="text-center">
+        <th>#</th>
+        <th>Empresa</th>
+        <th>Puesto Ocupado</th>
+        <th>Fecha Desde</th>
+        <th>Fecha Hasta</th>
+        <th>Salario</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody class="table-group-divider">
+      {% for i in experiencialaboral %}
+      <tr class="text-center">
+        <th>{{i.id}}</th>
+        <td>{{i.empresa}}</td>
+        <td>{{i.puestoOcupado}}</td>
+        <td>{{i.fechaDesde}}</td>
+        <td>{{i.fechaHasta}}</td>
+        <td>{{i.salario}}</td>
+        <td>
+          <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+            <a href="{% url 'Detallesexperiencialaboral' i.id %}" class="btn btn-primary">Detalles</a>
+            <a href="/Editarexperiencialaboral/{{i.id}}"  class="btn btn-warning text-white">Editar</a>
+            <a href="{% url 'Borrarexperiencialaboral' i.id %}" class="btn btn-danger" >Borrar</a>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

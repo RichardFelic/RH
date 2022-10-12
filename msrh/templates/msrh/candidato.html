@@ -1,0 +1,60 @@
+{% extends 'msrh/main.html' %}
+
+{% block content %}
+
+<h1>Gestión de Candidatos</h1>
+<hr>
+
+<a class="btn btn-success" href="{% url 'Crearcandidato' %}">Crear Candidato</a>
+
+<table class="table table-hover table-responsive">
+    <thead>
+      <tr class="text-center">
+        <th>#</th>
+        <th >Cédula</th>
+        <th>Nombre</th>
+        <th>Puesto al que aspira</th>
+        <th>Departamento</th>
+        <th>Salario al que aspira</th>
+        <th>Recomendación</th>
+        <th>Competencias</th>
+        <th>Capacitaciones</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody class="table-group-divider">
+      {% for i in candidato %}
+      <tr class="text-center">
+        <th>{{i.id}}</th>
+        <td>{{i.cedula}}</td>
+        <td>{{i.nombre}}</td>
+        <td>{{i.puestoAspira}}</td>
+        <td>{{i.departamento}}</td>
+        <td>{{i.salarioAspira}}</td>
+        <td>
+          {{i.recomendacion}}
+        </td>
+        <td>
+          {% for i in i.principalesCompetencia.all %}
+          {{i.descripCompetencia}}
+          {% endfor %}
+        </td>
+        <td>
+          {% for i in i.principalesCapacitacion.all %}
+          {{i.capacitacion}}
+          {% endfor %}
+        </td>
+        
+        
+        <td>
+          <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+            <a href="{% url 'Detallescandidato' i.id %}" class="btn btn-primary">Detalles</a>
+            <a href="/Editarcandidato/{{i.id}}"  class="btn btn-warning text-white">Editar</a>
+            <a href="{% url 'Borrarcandidato' i.id %}" class="btn btn-danger" >Borrar</a>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

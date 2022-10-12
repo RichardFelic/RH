@@ -1,0 +1,56 @@
+{% extends 'msrh/main.html' %}
+
+{% block content %}
+<h1>Gestión de Experiencia Laboral</h1>
+<hr><br>
+<div class="card ">
+    <div class="card-header text-center bg-danger text-white">
+     <h3>Borrar Empleado</h3>
+    </div>
+    <div class="card-body  ">
+
+        <div class="container col-md-7 col-lg-11">
+            <br>
+            <table  class="table table-light table-bordered  table-sm w-100 table-responsive" >
+            <tr class="text-center ">
+                <th>#</th>
+                <th>Nombre</th>
+                <th>Cédula</th>
+                <th>Fecha Ingreso</th>
+                <th>Departamento</th>
+                <th>Puesto</th>
+                <th>Salario Mensual</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody class="">
+
+              <tr class="text-center">
+                <th>{{empleado.id}}</th>
+                <td>{{empleado.nombre}}</td>
+                <td>{{empleado.cedula}}</td>
+                <td>{{empleado.fechaIngreso}}</td>
+                <td>{{empleado.departamento}}</td>
+                <td>{{empleado.puesto}}</td>
+                <td>{{empleado.salarioMensual}}</td>
+                <td>{{empleado.estado}}</td>
+              </tr>
+            </tbody>
+            </table>
+            
+            <p>¿Estás seguro que quieres borrar este registro?</p>
+        
+    </div>
+    <hr>
+            <form  method="POST"> 
+                {% csrf_token %}
+                <div class="modal-footer">
+                <div class="bd-example">
+                <a href="{% url 'empleado' %}" class="btn btn-danger">Cancelar</a>
+                <button type="submit" class="btn btn-success">Confirmar</button>
+            </div>
+        </div>
+            </form>   
+    </div>
+  </div>
+{% endblock %}

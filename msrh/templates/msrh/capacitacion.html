@@ -1,0 +1,43 @@
+{% extends 'msrh/main.html' %}
+
+{% block content %}
+
+<h1>Gestión de Capacitaciones</h1>
+<hr>
+
+<a class="btn btn-success" href="{% url 'Crearcapacitacion' %}">Crear Nueva Capacitación</a>
+
+<table class="table table-hover table-responsive">
+    <thead>
+      <tr class="text-center">
+        <th>#</th>
+        <th>Capacitación</th>
+        <th>Nivel</th>
+        <th>Fecha Desde</th>
+        <th>Fecha Hasta</th>
+        <th>Institución</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody class="table-group-divider">
+      {% for i in capacitacion %}
+      <tr class="text-center">
+        <th>{{i.id}}</th>
+        <td>{{i.capacitacion}}</td>
+        <td>{{i.nivel}}</td>
+        <td>{{i.fechaDesde}}</td>
+        <td>{{i.fechaHasta}}</td>
+        <td>{{i.institucion}}</td>
+        <td>
+          <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+            <a href="{% url 'Detallescapacitacion' i.id %}" class="btn btn-primary">Detalles</a>
+            <a href="/Editarcapacitacion/{{i.id}}"  class="btn btn-warning text-white">Editar</a>
+            <a href="{% url 'Borrarcapacitacion' i.id %}" class="btn btn-danger" >Borrar</a>
+          </div>
+        </td>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

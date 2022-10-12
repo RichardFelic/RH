@@ -1,0 +1,46 @@
+{% extends 'msrh/main.html' %}
+
+{% block content %}
+<h1>Gestión de Idiomas</h1>
+<hr><br>
+<div class="card col-md-8 offset-md-2">
+    <div class="card-header text-center bg-danger text-white">
+     <h3>Borrar Idioma</h3>
+    </div>
+    <div class="card-body  ">
+
+        <div class="container col-md-7 col-lg-11">
+            <br>
+            <table  class="table table-light table-bordered  table-sm w-100" >
+            <tr class="text-center ">
+                <th>#</th>
+                <th>Idioma</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody class="">
+
+              <tr class="text-center">
+                <th>{{idioma.id}}</th>
+                <td>{{idioma}}</td>
+                <td>{{idioma.estado}}</td>
+              </tr>
+            </tbody>
+            </table>
+            
+            <p>¿Estás seguro que quieres borrar este registro?</p>
+        
+    </div>
+    <hr>
+            <form  method="POST"> 
+                {% csrf_token %}
+                <div class="modal-footer">
+                <div class="bd-example">
+                <a href="{% url 'idioma' %}" class="btn btn-danger">Cancelar</a>
+                <button type="submit" class="btn btn-success">Confirmar</button>
+            </div>
+        </div>
+            </form>   
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends 'msrh/main.html' %}
+
+{% block content %}
+<h1>Gestión de Capacitaciones</h1>
+<hr><br>
+<div class="card ">
+    <div class="card-header text-center bg-danger text-white">
+     <h3>Borrar Capacitación</h3>
+    </div>
+    <div class="card-body  ">
+
+        <div class="container col-md-7 col-lg-11">
+            <br>
+            <table  class="table table-light table-bordered  table-sm w-100  table-responsive" >
+            <tr class="text-center ">
+                <th>#</th>
+                <th>Capacitación</th>
+                <th>Descripción</th>
+                <th>Nivel</th>
+                <th>Fecha Desde</th>
+                <th>Fecha Hasta</th>
+                <th>Institución</th>
+              </tr>
+            </thead>
+            <tbody class="">
+
+              <tr class="text-center">
+                <th>{{capacitacion.id}}</th>
+                <td>{{capacitacion}}</td>
+                <td>{{capacitacion.descripcion}}</td>
+                <td>{{capacitacion.nivel}}</td>
+                <td>{{capacitacion.fechaDesde}}</td>
+                <td>{{capacitacion.fechaHasta}}</td>
+                <td>{{capacitacion.institucion}}</td>
+              </tr>
+            </tbody>
+            </table>
+            
+            <p>¿Estás seguro que quieres borrar este registro?</p>
+        
+    </div>
+    <hr>
+            <form  method="POST"> 
+                {% csrf_token %}
+                <div class="modal-footer">
+                <div class="bd-example">
+                <a href="{% url 'capacitacion' %}" class="btn btn-danger">Cancelar</a>
+                <button type="submit" class="btn btn-success">Confirmar</button>
+            </div>
+        </div>
+            </form>   
+    </div>
+  </div>
+{% endblock %}

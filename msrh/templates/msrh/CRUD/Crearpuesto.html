@@ -1,0 +1,55 @@
+{% extends 'msrh/main.html' %}
+
+{% block content %}
+<h1>Gestión de Puestos</h1>
+<hr>
+<br>
+<div class="card col-md-8 offset-md-2">
+    <div class="card-header text-center bg-primary text-white">
+     <h3>Agregar Nuevo Puesto</h3>
+    </div>
+    <div class="card-body  ">
+
+        <div class="container col-md-7 col-lg-11">
+          
+        <form  method="POST"> 
+            {% csrf_token %}
+            <div class="row g-4">
+                <div class="col-md-9">
+                    <label for="puesto" class="form-label">Puesto: </label>
+                    {{form.puesto}}
+                </div>
+                <div class="col-3">
+                    <label for="inputState" class="form-label">Nivel de riesgo</label>
+                    {{form.nivelRiesgo}}
+                </div>
+            </div>
+            <br>
+                <div class="row g-4">
+                    <div class="col-6">
+                        <label for="puesto" class="form-label">Salario Mínimo: </label>
+                        {{form.nivelMinimoSalario}}
+                    </div>
+                    <div class="col-6">
+                        <label for="puesto" class="form-label">Salario Máximo: </label>
+                        {{form.nivelMaximoSalario}}
+                    </div>
+                </div>
+                <br>
+                <div class="form-check">
+                    {{form.estado}}
+                    <label class="form-check-label" for="">Disponible</label>
+                </div>
+                <br>
+            <div class="modal-footer">
+                <div class="bd-example">
+            <a href="{% url 'puesto' %}" type="button" class="btn btn-danger">Cancelar</a>
+            <button class="btn btn-success" type="submit">Agregar</button>
+        </div>
+            </div>
+            
+        </form>
+    </div>   
+    </div>
+  </div>
+{% endblock %}

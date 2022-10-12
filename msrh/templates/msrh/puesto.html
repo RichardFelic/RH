@@ -1,0 +1,41 @@
+{% extends 'msrh/main.html' %}
+{% block content %}
+<h1>Gestión de Puestos</h1>
+<hr>
+
+<a href="{% url 'Crearpuesto' %}" class="btn btn-success">Agregar Nuevo Puesto</a>
+
+<br>
+<table class="table table-hover table-responsive">
+    <thead>
+      <tr class="text-center ">
+        <th>#</th>
+        <th>Puesto</th>
+        <th>Nivel de Riesgo</th>
+        <th>Nivel Mínimo Salario</th>
+        <th>Nivel Máximo Salario</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody class="table-group-divider">
+      {% for i in puesto %}
+      <tr class="text-center">
+        <th>{{i.id}}</th>
+        <td>{{i.puesto}}</td>
+        <td>{{i.nivelRiesgo}}</td>
+        <td>{{i.nivelMinimoSalario}}</td>
+        <td>{{i.nivelMaximoSalario}}</td>
+        <td>{{i.estado}}</td>
+        <td>
+          <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+            <a href="{% url 'Detallespuesto' i.id %}" class="btn btn-primary">Detalles</a>
+            <a href="/Editarpuesto/{{i.id}}"  class="btn btn-warning text-white">Editar</a>
+            <a href="{% url 'Borrarpuesto' i.id %}" class="btn btn-danger" >Borrar</a>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

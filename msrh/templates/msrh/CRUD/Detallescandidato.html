@@ -1,0 +1,70 @@
+{% extends 'msrh/main.html' %}
+
+{% block content %}
+<h1>Gestión de Candidatos</h1>
+<hr><br>
+<div class="card col-md-8 offset-md-2">
+    <div class="card-header text-center bg-primary text-white">
+     <h3>Detalles</h3>
+    </div>
+    <div class="card-body">
+            <div class="container col-md-6 col-lg-13">
+                <table class="table table-borderless table-sm table-hover table-responsive">
+                    <tr>
+                        <th>Número: </th>
+                        <td>#{{candidato.id}}</td>
+                    </tr>
+                    <tr>
+                        <th>Nombre: </th>
+                        <td>{{candidato.nombre}}</td>
+                    </tr>
+                    <tr>
+                        <th>Cédula: </th>
+                        <td>{{candidato.cedula}}</td>
+                    </tr>
+                    <tr>
+                        <th>Puesto que Aspira: </th>
+                        <td>{{candidato.puestoAspira}}</td>
+                    </tr>
+                    <tr>
+                        <th>Departamento: </th>
+                        <td>{{candidato.departamento}}</td>
+                    </tr>
+                    <tr>
+                        <th>Puesto: </th>
+                        <td>{{empleado.puesto}}</td>
+                    </tr>
+                    <tr>
+                        <th>Salario que Aspira: </th>
+                        <td>{{candidato.salarioAspira}}</td>
+                    </tr>
+                    <tr>
+                        <th>Principales Competencias: </th>
+                        <td>{{candidato.principalesCompetencia}}</td>
+                    </tr>
+                    <tr>
+                        <th>Principales Capacitaciones: </th>
+                        <td>{{candidato.principalesCapacitacion}}</td>
+                    </tr>
+                    <tr>
+                        <th>Experiencia Laboral: </th>
+                        <td>{{candidato.expeiencia}}</td>
+                    </tr>
+                    <tr>
+                        <th>Recomendación: </th>
+                        <td>{{candidato.recomendacion}}</td>
+                    </tr>
+                  </table>
+        
+    </div>
+    <hr>
+                <div class="modal-footer">
+                <div class="bd-example">
+                <a href="{% url 'candidato' %}" class="btn btn-danger">Volver a la lista</a>
+                <a href="{% url 'Editarcandidato' candidato.id %}" class="btn btn-primary">Editar</a>
+            </div>
+        </div>
+              
+    </div>
+  </div>
+{% endblock %}

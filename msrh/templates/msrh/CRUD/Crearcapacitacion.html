@@ -1,0 +1,51 @@
+{% extends 'msrh/main.html' %}
+
+{% block content %}
+<h1>Gestión de Capacitaciones</h1>
+<hr>
+<br>
+<div class="card col-md-8 offset-md-2">
+    <div class="card-header text-center bg-primary text-white">
+     <h3>Agregar Nueva Capacitación</h3>
+    </div>
+    <div class="card-body  ">
+
+        <div class="container col-md-7 col-lg-11">
+          
+        <form enctype="multipart/form-data" method="POST"> 
+            {% csrf_token %}
+            {{form.capacitacion.label}}
+            {{form.capacitacion}}
+            <br>
+            {{form.descripcion.label}}
+            {{form.descripcion}}
+            <br>
+            {{form.nivel.label}}
+            {{form.nivel}}
+            <br>
+            <div class="row g-4">
+                <div class="col-6">
+                    {{form.fechaDesde.label}}
+                    {{form.fechaDesde}}
+                </div>
+                <div class="col-6">
+                    {{form.fechaHasta.label}}
+                    {{form.fechaHasta}}
+                </div>
+            </div>
+            <br>
+                {{form.institucion.label}}
+                {{form.institucion}}
+                <br>
+            <div class="modal-footer">
+                <div class="bd-example">
+            <a href="{% url 'capacitacion' %}" type="button" class="btn btn-danger">Cancelar</a>
+            <button class="btn btn-success" type="submit">Agregar</button>
+        </div>
+            </div>
+            
+        </form>
+    </div>   
+    </div>
+  </div>
+{% endblock %}
