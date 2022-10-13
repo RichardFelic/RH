@@ -1,13 +1,16 @@
 {% extends 'msrh/main.html' %}
 
 {% block content %}
-
+<div class="nav d-flex justify-content-between">
 <h1>Gestión de Empleados</h1>
+
+<a class="btn btn-success btn-lg" href="{% url 'Crearempleado' %}">Crear Nuevo Empleado</a>
+
+</div>
 <hr>
-
-<a class="btn btn-success" href="{% url 'Crearempleado' %}">Crear Nuevo Empleado</a>
-
-<table class="table table-hover table-responsive">
+<div class="">
+<a class="btn btn-secondary" href="{% url 'export_csv' %}">Imprimir Reporte</a></div><br>
+<table class="table table-hover table-responsive"  id="table_id">
     <thead>
       <tr class="text-center">
         <th>#</th>

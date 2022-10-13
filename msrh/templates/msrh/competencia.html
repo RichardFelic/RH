@@ -1,11 +1,12 @@
 {% extends 'msrh/main.html' %}
 
 {% block content %}
-
+<div class="nav d-flex justify-content-between">
 <h1>Gestión de Competencias</h1>
+<a href="{% url 'Crearcompe' %}" class="btn btn-success btn-lg">Agregar Nueva Competencia</a>
+</div>
 <hr>
-<a href="{% url 'Crearcompe' %}" class="btn btn-success">Agregar Nueva Competencia</a><br>
-<table class="table table-hover table-responsive">
+<table class="table table-hover table-responsive"  id="table_id">
     <thead>
       <tr class="text-center">
         <th>#</th>

@@ -1,9 +1,11 @@
 # Basico
-import imp
-from msilib.schema import TextStyle
+from datetime import datetime
+import datetime
+from sqlite3 import IntegrityError
 from django.shortcuts import render, redirect
 from msrh.forms import *
 from msrh.models import *
+import datetime
 
 # HttpResponse
 from http.client import HTTPResponse
@@ -19,80 +21,92 @@ from .decorators import unauthenticated_user, allowed_users, admin_only
 from django.contrib.auth.models import Group
 from django.contrib.auth.models import User
 
-#PDF
-from django.http import FileResponse
-from reportlab.pdfgen import canvas
-from reportlab.lib.units import inch
-from reportlab.lib.pagesizes import letter
-import io
+#Excel
+import csv
 
 # Create your views here.
 
+#Crear exportacion
+def export_csv(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename=Empledos.csv'
+
+    writer = csv.writer(response)
+    
+    empleado = Empleado.objects.all()
+    
+    writer.writerow(['Nombre', 'Cedula', 'Fecha de Ingreso', 'Departamento', 'Puesto', 'Salario Mensual', 'Estado'])
+
+    for empleado in empleado:
+        writer.writerow([empleado.nombre, empleado.cedula, empleado.fechaIngreso, empleado.departamento, empleado.puesto, empleado.salarioMensual, empleado.estado])
+    return response 
+
+#Home
 @login_required(login_url='login')
 @admin_only
 def home(request):
     puesto = Puesto.objects.all()
+    candidato = Candidato.objects.filter(createdBy=request.user).count()
+    empleado = Empleado.objects.all()
 
+    num_empleado = empleado.count()
     total_puesto = puesto.count()
 
-    context = {'total_puesto':total_puesto,}
+    context = {'total_puesto':total_puesto, 'candidato':candidato, 'num_empleado':num_empleado}
     return render(request, 'msrh/dashboard.html', context)
 
+#Competencia
 @login_required(login_url='login')
-@admin_only
+@allowed_users(allowed_roles=['admin'])
 def competencia(request):
     competencia = Compentencia.objects.all()
     return render(request, 'msrh/competencia.html', {'competencia':competencia})
 
+#Idioma
 @login_required(login_url='login')
-@admin_only
+@allowed_users(allowed_roles=['admin'])
 def idioma(request):
     idioma = Idioma.objects.all()
     return render(request, 'msrh/idioma.html', {'idioma':idioma})
 
+#Capacitacion
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['admin','candidato'])
 def capacitacion(request):
     capacitacion = Capacitacion.objects.all()
     return render(request, 'msrh/capacitacion.html', {'capacitacion':capacitacion})
 
+#Puesto
 @login_required(login_url='login')
-@admin_only
+@allowed_users(allowed_roles=['admin'])
 def puesto(request):
     puesto = Puesto.objects.all()
     return render(request, 'msrh/puesto.html', {'puesto':puesto})
 
+#candidato
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['admin','candidato'])
 def candidato(request):
     candidato = Candidato.objects.all()
     return render(request, 'msrh/candidato.html', {'candidato':candidato})
     
-
+#Experiencia Laboral
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['admin','candidato'])
 def experienciaLaboral(request):
     experiencialaboral = ExperienciaLaboral.objects.all()
     return render(request, 'msrh/experienciaLaboral.html', {'experiencialaboral':experiencialaboral})
 
+#Empleado
 @login_required(login_url='login')
-@admin_only
+@allowed_users(allowed_roles=['admin'])
 def empleado(request):
     empleado = Empleado.objects.all()
     return render(request, 'msrh/empleado.html', {'empleado':empleado})
 
-@login_required(login_url='login')
-@admin_only
-def registrarIdioma(request):
-    idioma = request.POST['txtIdioma']
-    estado = request.POST['checkEstado']
-
-    idioma = Idioma.objects.create(idioma=idioma, estado=estado)
-    return redirect('/')
-
 #AGREGAR PUESTO
 @login_required(login_url='login')
-@admin_only
+@allowed_users(allowed_roles=['admin'])
 def add_Puesto(request):
     form = PuestoForm()
     if request.method == "POST":
@@ -100,14 +114,12 @@ def add_Puesto(request):
         if form.is_valid():
                 form.save()
                 return redirect('/puesto')
-        else:
-            return HTTPResponse("""Something went wrong. Please reload the webpage by clicking 
-                                <a href="{{url: 'puesto'}}"> Reload</a>""" )
-    else:
-        return render(request, 'msrh/CRUD/Crearpuesto.html', {'form':form})
+        
+    return render(request, 'msrh/CRUD/Crearpuesto.html', {'form':form})
 
 #EDITAR PUESTO
 @login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def update_Puesto(request, pk):
     pk = str(pk)
     try:
@@ -120,22 +132,10 @@ def update_Puesto(request, pk):
         return redirect('/puesto')
     context = {'form':form, 'puesto':puesto}
     return render(request, 'msrh/CRUD/Editarpuesto.html', context)
-    #EDITAR INTENTO    
-    #puesto = Puesto.objects.get(id=pk)
-    #form = PuestoForm(instance=puesto)
-
-    #if request.method == 'POST':
-        #form = PuestoForm(request.POST or None, instance=puesto)
-        #if form.is_valid():
-            #form.save()
-           # return redirect('/puesto')
-    #context = {'form':form}
-    #return render(request, 'msrh\Editarpuesto.html', context)
-
-
 
 #Borrar Puesto
 @login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def delete_Puesto(request, pk):             
     puesto = Puesto.objects.get(id=pk)
     if request.method == 'POST':
@@ -143,20 +143,10 @@ def delete_Puesto(request, pk):
         return redirect('/puesto')
     context = {'puesto':puesto}
     return render(request, 'msrh/CRUD/Borrarpuesto.html', context)               
-    
-    #BORRAR INTENTO   
-   # pk = str(pk)
-   # try:
-      #  puesto = Puesto.objects.get(id=pk)
-   # except Puesto.DoesNotExist:
-       # return redirect('/puesto')
-    #puesto.delete()
-    #return redirect('/puesto')
-    #context = {'puesto':puesto}
-    #return render(request, 'msrh\Borrarpuesto.html', context)
 
 #Detalles Puesto
 @login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def detail_Puesto(request, pk):
     puesto = Puesto.objects.get(id=pk)
     context = {'puesto':puesto}
@@ -164,6 +154,7 @@ def detail_Puesto(request, pk):
 
 #Agregar Compe
 @login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def add_Compe(request):
     form_compe = CompetenciaForm()
     if request.method == "POST":
@@ -171,15 +162,13 @@ def add_Compe(request):
         if form_compe.is_valid():
                 form_compe.save()
                 return redirect('/competencia')
-        else:
-            return HTTPResponse("""Something went wrong. Please reload the webpage by clicking 
-                                <a href="{{url: 'competencia'}}"> Reload</a>""" )
-    else:
-        return render(request, 'msrh/CRUD/Crearcompe.html', {'form_compe':form_compe})
+        
+    return render(request, 'msrh/CRUD/Crearcompe.html', {'form_compe':form_compe})
 
 
 #Editar Compe    
 @login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def update_Compe(request, pk):
     pk = str(pk)
     try:
@@ -195,6 +184,7 @@ def update_Compe(request, pk):
 
 #Borrar Compe
 @login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def delete_Compe(request, pk):             
     compe = Compentencia.objects.get(id=pk)
     if request.method == 'POST':
@@ -205,6 +195,7 @@ def delete_Compe(request, pk):
 
 #Detalles Competencia
 @login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def detail_Compe(request, pk):
     compe = Compentencia.objects.get(id=pk)
     context = {'compe':compe}
@@ -212,6 +203,7 @@ def detail_Compe(request, pk):
 
 #Crear Idioma
 @login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def add_Idioma(request):
     form = IdiomaForm()
     if request.method == "POST":
@@ -219,14 +211,13 @@ def add_Idioma(request):
         if form.is_valid():
                 form.save()
                 return redirect('/idioma')
-        else:
-            return HTTPResponse("""Something went wrong. Please reload the webpage by clicking 
-                                <a href="{{url: 'idioma'}}"> Reload</a>""" )
-    else:
-        return render(request, 'msrh/CRUD/Crearidioma.html', {'form':form})
+        
+    
+    return render(request, 'msrh/CRUD/Crearidioma.html', {'form':form})
 
 #Editar Idioma  
 @login_required(login_url='login') 
+@allowed_users(allowed_roles=['admin'])
 def update_Idioma(request, pk):
     pk = str(pk)
     try:
@@ -242,6 +233,7 @@ def update_Idioma(request, pk):
 
 #Borrar Idioma
 @login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def delete_Idioma(request, pk):             
     idioma = Idioma.objects.get(id=pk)
     if request.method == 'POST':
@@ -252,6 +244,7 @@ def delete_Idioma(request, pk):
 
 #Detalles Idioma
 @login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def detail_Idioma(request, pk):
     idioma = Idioma.objects.get(id=pk)
     context = {'idioma':idioma}
@@ -259,6 +252,7 @@ def detail_Idioma(request, pk):
 
 #Crear Experiencia Laboral
 @login_required(login_url='login')
+@allowed_users(allowed_roles=['admin', 'candidato'])
 def add_ExperienciaLaboral(request):
     form = ExperienciaLaboralForm()
     if request.method == "POST":
@@ -266,14 +260,12 @@ def add_ExperienciaLaboral(request):
         if form.is_valid():
                 form.save()
                 return redirect('/experienciaLaboral')
-        else:
-            return HTTPResponse("""Something went wrong. Please reload the webpage by clicking 
-                                <a href="{{url: 'experienciaLaboral'}}"> Reload</a>""" )
-    else:
-        return render(request, 'msrh/CRUD/Crearexperiencialaboral.html', {'form':form})
+    
+    return render(request, 'msrh/CRUD/Crearexperiencialaboral.html', {'form':form})
 
 #Editar Experiencia Laboral
 @login_required(login_url='login')   
+@allowed_users(allowed_roles=['admin', 'candidato'])
 def update_ExperienciaLaboral(request, pk):
     pk = str(pk)
     try:
@@ -288,7 +280,8 @@ def update_ExperienciaLaboral(request, pk):
     return render(request, 'msrh/CRUD/Editarexperiencialaboral.html', context)
 
 #Borrar Experiencia Laboral
-@login_required(login_url='login')   
+@login_required(login_url='login') 
+@allowed_users(allowed_roles=['admin', 'candidato'])  
 def delete_ExperienciaLaboral(request, pk):             
     experienciaLaboral = ExperienciaLaboral.objects.get(id=pk)
     if request.method == 'POST':
@@ -298,7 +291,8 @@ def delete_ExperienciaLaboral(request, pk):
     return render(request, 'msrh/CRUD/Borrarexperiencialaboral.html', context)   
 
 #Detalles Experiencia Laboral
-@login_required(login_url='login')  
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin', 'candidato'])  
 def detail_ExperienciaLaboral(request, pk):
     experienciaLaboral = ExperienciaLaboral.objects.get(id=pk)
     context = {'experienciaLaboral':experienciaLaboral}
@@ -306,21 +300,21 @@ def detail_ExperienciaLaboral(request, pk):
 
 #Crear Capacitacion
 @login_required(login_url='login')
+@allowed_users(allowed_roles=['admin','candidato'])
 def add_Capacitacion(request):
     form = CapacitacionForm()
     if request.method == "POST":
         form = CapacitacionForm(request.POST or None)
         if form.is_valid():
                 form.save()
-                return redirect('/capacitacion')
-        else:
-            return HTTPResponse("""Something went wrong. Please reload the webpage by clicking 
-                                <a href="{{url: 'capacitacion'}}"> Reload</a>""" )
-    else:
-        return render(request, 'msrh/CRUD/Crearcapacitacion.html', {'form':form})
+                return redirect('capacitacion')
+        
+
+    return render(request, 'msrh/CRUD/Crearcapacitacion.html', {'form':form})
 
 #Editar Capacitacion
-@login_required(login_url='login')   
+@login_required(login_url='login')  
+@allowed_users(allowed_roles=['admin', 'candidato']) 
 def update_Capacitacion(request, pk):
     pk = str(pk)
     try:
@@ -335,7 +329,8 @@ def update_Capacitacion(request, pk):
     return render(request, 'msrh/CRUD/Editarcapacitacion.html', context)
 
 #Borrar Capacitacion
-@login_required(login_url='login')   
+@login_required(login_url='login')  
+@allowed_users(allowed_roles=['admin', 'candidato']) 
 def delete_Capacitacion(request, pk):             
     capacitacion = Capacitacion.objects.get(id=pk)
     if request.method == 'POST':
@@ -346,6 +341,7 @@ def delete_Capacitacion(request, pk):
 
 #Detalles Capacitacion
 @login_required(login_url='login')
+@allowed_users(allowed_roles=['admin', 'candidato'])
 def detail_Capacitacion(request, pk):
     capacitacion = Capacitacion.objects.get(id=pk)
     context = {'capacitacion':capacitacion}
@@ -353,6 +349,7 @@ def detail_Capacitacion(request, pk):
 
 #Crear Empleado
 @login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def add_Empleado(request):
     form = EmpleadoForm()
     if request.method == "POST":
@@ -360,14 +357,12 @@ def add_Empleado(request):
         if form.is_valid():
                 form.save()
                 return redirect('/empleado')
-        else:
-            return HTTPResponse("""Something went wrong. Please reload the webpage by clicking 
-                                <a href="{{url: 'empleado'}}"> Reload</a>""" )
-    else:
-        return render(request, 'msrh/CRUD/Crearempleado.html', {'form':form})
+    
+    return render(request, 'msrh/CRUD/Crearempleado.html', {'form':form})
 
 #Editar Empleado
 @login_required(login_url='login')   
+@allowed_users(allowed_roles=['admin'])
 def update_Empleado(request, pk):
     pk = str(pk)
     try:
@@ -382,7 +377,8 @@ def update_Empleado(request, pk):
     return render(request, 'msrh/CRUD/Editarempleado.html', context)
 
 #Borrar Empleado
-@login_required(login_url='login')   
+@login_required(login_url='login') 
+@allowed_users(allowed_roles=['admin'])  
 def delete_Empleado(request, pk):             
     empleado = Empleado.objects.get(id=pk)
     if request.method == 'POST':
@@ -393,6 +389,7 @@ def delete_Empleado(request, pk):
 
 #Detalles Empleado
 @login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def detail_Empleado(request, pk):
     empleado = Empleado.objects.get(id=pk)
     context = {'empleado':empleado}
@@ -400,29 +397,22 @@ def detail_Empleado(request, pk):
 
 #Crear Candidato
 @login_required(login_url='login')
+@allowed_users(allowed_roles=['admin','candidato'])
 def add_Candidato(request):
     form = CandidatoForm()
     if request.method == "POST":
         form = CandidatoForm(request.POST or None)
+        form.instance.createdBy = request.user
         if form.is_valid():
                 form.save()
                 return redirect('/candidato')
+        
     
     return render(request, 'msrh/CRUD/Crearcandidato.html', {'form':form})
-
-   # data={'form': CandidatoForm()}
-  #  if request.method == "POST":
-   #     form = CandidatoForm(data=request.POST)
-     #   if form.is_valid():
-     #       form.save()
-     #   else:
-    #        data["form"] = form
-    #return render(request, 'msrh/CRUD/Crearcandidato.html', data)
-
-
-
+    
 #Editar Candidato
 @login_required(login_url='login')   
+@allowed_users(allowed_roles=['admin','candidato'])
 def update_Candidato(request, pk):
     pk = str(pk)
     try:
@@ -437,17 +427,20 @@ def update_Candidato(request, pk):
     return render(request, 'msrh/CRUD/Editarcandidato.html', context)
 
 #Borrar Candidato
-@login_required(login_url='login')   
+@login_required(login_url='login')  
+@allowed_users(allowed_roles=['admin','candidato']) 
 def delete_Candidato(request, pk):             
     candidato = Candidato.objects.get(id=pk)
     if request.method == 'POST':
         candidato.delete()
         return redirect('/candidato')
+        
     context = {'candidato':candidato}
     return render(request, 'msrh/CRUD/Borrarcandidato.html', context)   
 
 #Detalles Candidato
 @login_required(login_url='login') 
+@allowed_users(allowed_roles=['admin','candidato'])
 def detail_Candidato(request, pk):
     candidato = Candidato.objects.get(id=pk)
     context = {'candidato':candidato}
@@ -500,44 +493,25 @@ def registerPage(request):
 @allowed_users(allowed_roles=['candidato'])
 def userPage(request):
     #candidatos = Candidato.objects.filter(createdBy=request.user)
-    
+    candidato = Candidato.objects.filter(createdBy=request.user)
+
     #context={'candidato': candidato}
-    return render(request,'msrh/user.html')
+    return render(request,'msrh/user.html', {'candidato':candidato})
 
-#PDF
-def pdf(request):
-    buf = io.BytesIO()
-    c = canvas.Canvas(buf, pagesize=letter, bottomup=0)
-    textob = c.beginText()
-    textob.setTextOrigin(inch, inch)
-    textob.setFont("Helvetica", 14)
-
-    #lines = [
-        #"This is line 1",
-        #"This is line 2",
-        #"This is line 3",
-   # ]
-    empleado = Empleado.objects.all()
-    lines = []
-
-    for i in empleado:
-        lines.append(i.id)
-        lines.append(i.nombre)
-        lines.append(i.cedula)
-        lines.append(str(i.fechaIngreso))
-        lines.append(i.departamento)
-        lines.append(i.puesto)
-        lines.append(i.salarioMensual)
-        lines.append(i.estado)
-        lines.append("===============")
-
-
-    for line in lines:
-        textob.textLine(line)
-
-    c.drawText(textob)
-    c.showPage()
-    c.save()
-    buf.seek(0)
-
-    return FileResponse(buf, as_attachment=True, filename='Reporte de Empleados.pdf')
+#Proceso de Candidato a Empleado
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
+def candidatoProceso(request, pk):
+    candidato = Candidato.objects.filter(id=pk)
+    try:
+        for i in candidato:
+            Empleado.objects.create(
+                nombre=i.nombre, cedula=i.cedula, fechaIngreso=datetime.datetime.now(),
+                departamento=i.departamento, puesto=i.puestoAspira, salarioMensual=i.salarioAspira,
+                estado=True
+            )
+        Candidato.objects.filter(id=pk).delete()
+    except IntegrityError:
+        messages.error(request, "El candidadto ya esta seleccionado como empleado.")
+        return redirect('candidato')
+    return redirect('empleado')

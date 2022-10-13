@@ -31,24 +31,31 @@
                         <td>{{candidato.departamento}}</td>
                     </tr>
                     <tr>
-                        <th>Puesto: </th>
-                        <td>{{empleado.puesto}}</td>
-                    </tr>
-                    <tr>
                         <th>Salario que Aspira: </th>
                         <td>{{candidato.salarioAspira}}</td>
                     </tr>
+                    
                     <tr>
                         <th>Principales Competencias: </th>
-                        <td>{{candidato.principalesCompetencia}}</td>
+                        <td>
+                            {% for i in candidato.principalesCompetencia.all %}
+                            {{i.descripCompetencia}}
+                            {% endfor %}
+                        </td>
                     </tr>
                     <tr>
                         <th>Principales Capacitaciones: </th>
-                        <td>{{candidato.principalesCapacitacion}}</td>
+                        <td>{% for i in candidato.principalesCapacitacion.all %}
+                            {{i.capacitacion}}
+                            {% endfor %}
+                        </td>
                     </tr>
                     <tr>
                         <th>Experiencia Laboral: </th>
-                        <td>{{candidato.expeiencia}}</td>
+                        <td>{% for i in candidato.principalesCapacitacion.all %}
+                            {{i.id}}
+                            {% endfor %}
+                        </td>
                     </tr>
                     <tr>
                         <th>Recomendación: </th>

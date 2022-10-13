@@ -1,13 +1,12 @@
 {% extends 'msrh/main.html' %}
 
 {% block content %}
-
+<div class="nav d-flex justify-content-between">
 <h1>Gestión de Experiencia Laboral</h1>
+<a class="btn btn-success btn-lg" href="{% url 'Crearexperiencialaboral' %}">Crear Nueva Experiencia Laboral</a>
+</div>
 <hr>
-
-<a class="btn btn-success" href="{% url 'Crearexperiencialaboral' %}">Crear Nueva Experiencia Laboral</a>
-
-<table class="table table-hover table-responsive">
+<table class="table table-hover table-responsive"  id="table_id">
     <thead>
       <tr class="text-center">
         <th>#</th>
@@ -16,7 +15,9 @@
         <th>Fecha Desde</th>
         <th>Fecha Hasta</th>
         <th>Salario</th>
+        {% if request.user.is_staff %} 
         <th>Acciones</th>
+        {% endif %}
       </tr>
     </thead>
     <tbody class="table-group-divider">
@@ -29,11 +30,13 @@
         <td>{{i.fechaHasta}}</td>
         <td>{{i.salario}}</td>
         <td>
+          {% if request.user.is_staff %} 
           <div class="btn-group" role="group" aria-label="Basic mixed styles example">
             <a href="{% url 'Detallesexperiencialaboral' i.id %}" class="btn btn-primary">Detalles</a>
             <a href="/Editarexperiencialaboral/{{i.id}}"  class="btn btn-warning text-white">Editar</a>
             <a href="{% url 'Borrarexperiencialaboral' i.id %}" class="btn btn-danger" >Borrar</a>
           </div>
+          {% endif %}
         </td>
       </tr>
       {% endfor %}

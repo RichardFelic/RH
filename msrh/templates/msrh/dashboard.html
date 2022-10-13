@@ -22,10 +22,10 @@
 		<div class="col-md">
 			<div class="card text-center text-white  mb-3" id="orders-delivered">
 			  	<div class="card-header bg-primary">
-			  		<h5 class="card-title">Orders Delivered</h5>
+			  		<h5 class="card-title">Candidatos Pendiente</h5>
 			  	</div>
 			  	<div class="card-body">
-			    	<h3 class="card-title text-dark"></h3>
+			    	<h3 class="card-title text-dark">{{candidato}}</h3>
 			  	</div>
 			</div>
 		</div>
@@ -35,50 +35,83 @@
 		<div class="col-md">
 			<div class="card text-center text-white  mb-3" id="orders-pending">
 			  	<div class="card-header bg-primary">
-			  		<h5 class="card-title">Orders Pending</h5>
+			  		<h5 class="card-title">Números de Empleados</h5>
 			  	</div>
 			  	<div class="card-body">
-			    	<h3 class="card-title text-dark"></h3>
+			    	<h3 class="card-title text-dark">{{num_empleado}}</h3>
 			  	</div>
 			</div>
 		</div>
 	</div>
 </div>
 
-<div class="row">
-	<div class="col-md-5">
-		<h5>IDIOMA</h5>
-		<hr>
-		<div class="card card-body">
-			<a class="btn btn-primary  btn-sm btn-block" href="">Create Idioma</a>
-			<table class="table table-sm">
-				<tr>
-					<th>#</th>
-					<th>Idioma</th>
-					<th>Disponoble</th>
-                    <th>Acción</th>
-				</tr>
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    <div class="col">
+      <div class="card text-bg-primary">
+        <div class="card-body">
+          <h5 class="card-title">Idiomas</h5>
+          <div class="modal-footer">
+            <a href="{% url 'idioma' %}" class="btn btn-success">Ir a idiomas</a>
+           </div>
+        </div>
+      </div>
+    </div>
 
-			</table>
-		</div>
-	</div>
+    <div class="col">
+      <div class="card text-bg-primary">
+        <div class="card-body">
+          <h5 class="card-title">Competencias</h5>
+          <div class="modal-footer">
+            <a href="{% url 'competencia' %}" class="btn btn-success">Ir a competencias</a>
+           </div>
+        </div>
+      </div>
+    </div>
 
-    <div class="col-md-7">
-		<h5>COMPETENCIAS</h5>
-		<hr>
-		<div class="card card-body">
-			<a class="btn btn-primary  btn-sm btn-block" href="">Create Competencia</a>
-			<table class="table table-sm">
-				<tr>
-					<th>#</th>
-					<th>Competencias</th>
-					<th>Estado</th>
-					<th>Acciones</th>
-				</tr>
-		
-			</table>
-		</div>
-	</div>
+    <div class="col">
+    <div class="card text-bg-primary">
+      <div class="card-body">
+        <h5 class="card-title">Capacitaciones</h5>
+        <div class="modal-footer">
+            <a href="{% url 'capacitacion' %}" class="btn btn-success">Ir a capacitaciones</a>
+           </div>
+      </div>
+     </div>
+    </div>  
+    
+    <div class="col">
+        <div class="card text-bg-primary">
+          <div class="card-body">
+            <h5 class="card-title">Puestos</h5>
+            <div class="modal-footer">
+                <a href="{% url 'puesto' %}" class="btn btn-success">Ir a puestos</a>
+               </div>
+          </div>
+         </div>
+        </div> 
+
+    <div class="col">
+         <div class="card text-bg-primary">
+             <div class="card-body">
+             <h5 class="card-title">Experiencia Laboral</h5>
+            <div class="modal-footer">
+                <a href="{% url 'experienciaLaboral' %}" class="btn btn-success">Ir a Experiencia Laboral</a>
+               </div>
+            </div>
+         </div>
+        </div> 
+        
+        <div class="col">
+            <div class="card text-bg-primary">
+                <div class="card-body">
+                <h5 class="card-title">Empleados</h5>
+               <div class="modal-footer">
+                <a href="{% url 'empleado' %}" class="btn btn-success">Ir a empleados</a>
+               </div>
+               </div>
+            </div>
+           </div>  
+</div>
 
 </div>-->
 {% endblock %}

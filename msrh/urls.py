@@ -16,7 +16,7 @@ urlpatterns = [
     path('candidato/', views.candidato, name='candidato'),
     path('experienciaLaboral/', views.experienciaLaboral, name='experienciaLaboral'),
     path('empleado/', views.empleado, name='empleado'),
-    path('registrarIdioma/', views.registrarIdioma),
+
     
     #Competición CRUD
     path('Crearcompe/', views.add_Compe, name='Crearcompe'),
@@ -68,8 +68,14 @@ urlpatterns = [
     #User
     path('user/', views.userPage, name='user'),
 
+    #Proceso de Candidato a Empleado
+    path('candidatoProceso/<str:pk>/', views.candidatoProceso, name='candidatoProceso'),
+
+    #
+    path('export_csv/', views.export_csv, name='export_csv'),
+
     #PDF
-    path('pdf/', views.pdf, name='pdf'),
+    #path('pdf/', views.pdf, name='pdf'),
 ]
 
 if settings.DEBUG:

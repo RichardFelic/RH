@@ -2,14 +2,15 @@
 
 {% block content %}
 
+<div class="nav d-flex justify-content-between">
 <h1>Gestión de Idiomas</h1>
+<a href="{% url 'Crearidioma' %}" class="btn btn-success btn-lg">Agregar Nuevo Idioma</a><br>
+</div>
 <hr>
-
-<a href="{% url 'Crearidioma' %}" class="btn btn-success">Agregar Nuevo Idioma</a><br>
-
-<table  class="table table-hover table-responsive">
+<div class="table-responsive">
+<table  class="table table-hover table-responsive"  id="table_id">
     <thead>
-      <tr class="text-center ">
+      <tr >
         <th>#</th>
         <th >Idioma</th>
         <th>Estado</th>
@@ -18,7 +19,7 @@
     </thead>
     <tbody class="table-group-divider">
         {% for i in idioma %}
-      <tr class="text-center ">
+      <tr class="text-center">
         <th>{{i.id}}</th>
         <td>{{i.idioma}}</td>
         <td>{{i.estado}}</td>
@@ -34,5 +35,5 @@
     </tbody>
   </table>
 
-
+</div>
 {% endblock %}

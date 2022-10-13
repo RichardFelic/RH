@@ -1,13 +1,14 @@
 {% extends 'msrh/main.html' %}
 
 {% block content %}
-
+<div class="nav d-flex justify-content-between">
 <h1>Gestión de Candidatos</h1>
-<hr>
 
-<a class="btn btn-success" href="{% url 'Crearcandidato' %}">Crear Candidato</a>
 
-<table class="table table-hover table-responsive">
+<a class="btn btn-success btn-lg" href="{% url 'Crearcandidato' %}">Crear Nuevo Candidato</a>
+</div> <hr>
+<div class="table-responsive">
+<table class="table table-hover table-responsive " id="table_id">
     <thead>
       <tr class="text-center">
         <th>#</th>
@@ -19,7 +20,9 @@
         <th>Recomendación</th>
         <th>Competencias</th>
         <th>Capacitaciones</th>
+        {% if request.user.is_staff %}  
         <th>Acciones</th>
+        {% endif %}
       </tr>
     </thead>
     <tbody class="table-group-divider">
@@ -47,14 +50,20 @@
         
         
         <td>
+          {% if request.user.is_staff %} 
           <div class="btn-group" role="group" aria-label="Basic mixed styles example">
             <a href="{% url 'Detallescandidato' i.id %}" class="btn btn-primary">Detalles</a>
             <a href="/Editarcandidato/{{i.id}}"  class="btn btn-warning text-white">Editar</a>
             <a href="{% url 'Borrarcandidato' i.id %}" class="btn btn-danger" >Borrar</a>
+          
+            <a href="/candidatoProceso/{{i.id}}"  class="btn btn-success text-white">Contratar</a>
+            
           </div>
+          {% endif %} 
         </td>
       </tr>
       {% endfor %}
     </tbody>
   </table>
+</div>
 {% endblock %}
